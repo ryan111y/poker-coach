@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="420" height="650" viewBox="0 0 420 650">
+  <rect width="420" height="650" rx="20" fill="#16213e"/>
+  <text x="30" y="40" font-size="16" fill="#888">← 返回</text>
+  <text x="260" y="40" font-size="13" fill="#888">步骤 3/4：选择对比</text>
+
+  <!-- Timeline -->
+  <text x="50" y="80" text-anchor="middle" font-size="10" fill="#666">翻牌前</text>
+  <text x="145" y="80" text-anchor="middle" font-size="10" fill="#e94560">🖱 点我</text>
+  <text x="240" y="80" text-anchor="middle" font-size="10" fill="#666">转牌</text>
+  <text x="335" y="80" text-anchor="middle" font-size="10" fill="#666">河牌</text>
+
+  <rect x="30" y="95" width="75" height="28" rx="14" fill="#1a1a3e" stroke="#2a2a4e" stroke-width="1"/>
+  <text x="67" y="113" text-anchor="middle" font-size="11" fill="#888">跟注3</text>
+  <rect x="110" y="95" width="75" height="28" rx="14" fill="#1a1a3e" stroke="#e94560" stroke-width="2"/>
+  <text x="147" y="113" text-anchor="middle" font-size="11" fill="#e94560" font-weight="bold">下注20</text>
+  <rect x="200" y="95" width="75" height="28" rx="14" fill="#1a1a3e" stroke="#2a2a4e" stroke-width="1"/>
+  <text x="237" y="113" text-anchor="middle" font-size="11" fill="#888">过牌</text>
+  <rect x="290" y="95" width="75" height="28" rx="14" fill="#1a1a3e" stroke="#2a2a4e" stroke-width="1"/>
+  <text x="327" y="113" text-anchor="middle" font-size="11" fill="#888">弃牌</text>
+
+  <!-- Decision modal -->
+  <rect x="20" y="145" width="380" height="180" rx="14" fill="#1a1a3e" stroke="#3a3a5e" stroke-width="1"/>
+  <text x="210" y="175" text-anchor="middle" font-size="16" fill="#e94560" font-weight="bold">🎯 试试替代方案</text>
+  <text x="210" y="200" text-anchor="middle" font-size="12" fill="#888">翻牌 K♦7♠2♣ · 你选择了下注20</text>
+
+  <rect x="30" y="215" width="170" height="90" rx="10" fill="none" stroke="#3a3a5e" stroke-width="1"/>
+  <text x="115" y="245" text-anchor="middle" font-size="28">✋</text>
+  <text x="115" y="270" text-anchor="middle" font-size="14" fill="#e0e0e0">过牌</text>
+  <text x="115" y="290" text-anchor="middle" font-size="10" fill="#888">让牌看免费牌</text>
+
+  <rect x="215" y="215" width="170" height="90" rx="10" fill="none" stroke="#e94560" stroke-width="2"/>
+  <text x="300" y="245" text-anchor="middle" font-size="28">📈</text>
+  <text x="300" y="270" text-anchor="middle" font-size="14" fill="#e0e0e0">加注</text>
+  <text x="300" y="290" text-anchor="middle" font-size="10" fill="#888">最大化价值</text>
+
+  <!-- Opponent range -->
+  <text x="30" y="360" font-size="14" fill="#aaa">对手范围（可选）：</text>
+  <rect x="30" y="375" width="90" height="34" rx="8" fill="#0f3460"/>
+  <text x="75" y="397" text-anchor="middle" font-size="12" fill="#fff">紧 (17%)</text>
+  <rect x="130" y="375" width="90" height="34" rx="8" fill="#e94560"/>
+  <text x="175" y="397" text-anchor="middle" font-size="12" fill="#fff" font-weight="bold">中等 (30%)</text>
+  <rect x="230" y="375" width="90" height="34" rx="8" fill="none" stroke="#3a3a5e" stroke-width="1"/>
+  <text x="275" y="397" text-anchor="middle" font-size="12" fill="#888">松 (50%)</text>
+
+  <text x="30" y="440" font-size="14" fill="#aaa">模拟次数：</text>
+  <text x="110" y="440" font-size="14" fill="#fff" font-weight="bold">10,000</text>
+
+  <!-- Start button -->
+  <rect x="90" y="540" width="240" height="52" rx="12" fill="#e94560"/>
+  <text x="210" y="572" text-anchor="middle" font-size="18" fill="#fff" font-weight="bold">🚀 开始模拟</text>
+
+  <text x="210" y="640" text-anchor="middle" font-size="11" fill="#555">Page 4/6 · 选择决策点 ⭐ 核心</text>
+</svg>

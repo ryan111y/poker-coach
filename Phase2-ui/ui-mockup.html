@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>德扑复盘教练 - UI 高保真原型</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Inter', -apple-system, 'PingFang SC', sans-serif; background: #0d0d1a; color: #e0e0e0; }
+.container { max-width: 1200px; margin: 0 auto; padding: 30px 20px; }
+h1 { text-align: center; margin-bottom: 10px; font-size: 28px; }
+h1 span { color: #e94560; }
+.subtitle { text-align: center; color: #888; margin-bottom: 40px; font-size: 14px; }
+
+/* Phone frame */
+.phone { width: 390px; min-height: 780px; margin: 0 auto; background: #16213e; border-radius: 40px; padding: 20px; border: 1px solid #2a2a4e; position: relative; box-shadow: 0 20px 60px rgba(0,0,0,0.5); }
+.phone-notch { width: 150px; height: 24px; background: #0d0d1a; border-radius: 0 0 16px 16px; margin: -20px auto 10px; }
+
+/* Header */
+.header { display: flex; align-items: center; justify-content: space-between; padding: 10px 0 20px; }
+.header-left { font-size: 14px; color: #888; cursor: pointer; }
+.header-center { font-size: 12px; color: #555; }
+.header-right { font-size: 14px; color: #e94560; font-weight: 600; }
+
+/* Cards */
+.cards-row { display: flex; gap: 10px; margin: 10px 0; }
+.card { width: 56px; height: 78px; border-radius: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 16px; font-weight: 700; transition: all 0.2s; cursor: pointer; position: relative; }
+.card-selected { background: rgba(233,69,96,0.08); border: 2px solid #e94560; }
+.card-empty { border: 2px dashed #3a3a5e; background: transparent; font-size: 24px; color: #555; }
+.card-red { color: #e94560; }
+.card-black { color: #d0d0d0; }
+.card-suit { font-size: 12px; margin-top: 2px; }
+
+.board { display: flex; gap: 8px; margin: 10px 0; }
+.board-card { width: 50px; height: 68px; border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; border-width: 2px; border-style: solid; }
+.board-flop { border-color: #16c79a; }
+.board-turn { border-color: #f0a500; }
+.board-river { border-color: #e94560; }
+
+/* Labels */
+.label { font-size: 13px; color: #888; margin-bottom: 6px; margin-top: 16px; }
+.label-sm { font-size: 11px; color: #666; margin-bottom: 4px; }
+
+/* Chips / Toggles */
+.chip-group { display: flex; gap: 8px; flex-wrap: wrap; }
+.chip { padding: 8px 18px; border-radius: 20px; font-size: 13px; border: 1px solid #3a3a5e; cursor: pointer; transition: all 0.2s; background: transparent; color: #aaa; }
+.chip-active { background: #e94560; border-color: #e94560; color: #fff; }
+.chip-blue { background: #0f3460; border-color: #0f3460; color: #fff; }
+
+/* Button */
+.btn { padding: 14px 32px; border-radius: 12px; border: none; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 8px; justify-content: center; }
+.btn-primary { background: #e94560; color: #fff; }
+.btn-primary:hover { background: #d63850; }
+.btn-green { background: #16c79a; color: #fff; }
+.btn-outline { background: transparent; border: 2px solid #3a3a5e; color: #aaa; }
+.btn-sm { padding: 10px 20px; font-size: 13px; }
+
+/* Grid of screens */
+.screens { display: grid; grid-template-columns: repeat(auto-fit, minmax(390px, 1fr)); gap: 40px; justify-items: center; }
+.screen-wrapper { text-align: center; }
+.screen-label { margin-top: 16px; font-size: 13px; color: #888; }
+.screen-label strong { color: #e94560; }
+
+/* Action table */
+.action-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+.action-cell { background: #1a1a3e; border-radius: 10px; padding: 10px 8px; text-align: center; border: 1px solid #2a2a4e; }
+.action-cell .a-label { font-size: 10px; color: #666; margin-bottom: 4px; }
+.action-cell .a-value { font-size: 15px; font-weight: 700; color: #fff; }
+.action-cell.active { border-color: #e94560; }
+.action-cell.flop-active { border-color: #16c79a; }
+.action-cell.gray .a-value { color: #666; }
+
+/* timeline */
+.timeline { display: flex; align-items: center; margin: 16px 0; gap: 0; padding: 10px 0; }
+.tl-node { flex: 1; text-align: center; position: relative; }
+.tl-label { font-size: 10px; color: #666; margin-bottom: 6px; }
+.tl-action { display: inline-block; padding: 6px 14px; border-radius: 14px; font-size: 12px; border: 1px solid #2a2a4e; background: #1a1a3e; }
+.tl-action.active { border-color: #e94560; background: rgba(233,69,96,0.12); color: #e94560; cursor: pointer; }
+.tl-action.passive { color: #666; }
+
+/* Modal */
+.modal-overlay { background: rgba(0,0,0,0.5); border-radius: 16px; padding: 20px; margin: 12px 0; }
+.modal { background: #1a1a3e; border-radius: 14px; padding: 20px; border: 1px solid #3a3a5e; }
+.modal h3 { font-size: 16px; color: #e94560; margin-bottom: 8px; }
+.modal .desc { font-size: 12px; color: #888; margin-bottom: 16px; }
+.option-group { display: flex; gap: 12px; }
+.option { flex: 1; padding: 16px 12px; text-align: center; border-radius: 12px; border: 2px solid #2a2a4e; cursor: pointer; transition: all 0.2s; }
+.option:hover { border-color: #e94560; }
+.option .opt-icon { font-size: 28px; margin-bottom: 6px; }
+.option .opt-name { font-size: 14px; font-weight: 600; color: #e0e0e0; }
+.option .opt-desc { font-size: 11px; color: #888; margin-top: 4px; }
+.option.selected { border-color: #e94560; background: rgba(233,69,96,0.06); }
+
+/* Player selection */
+.player-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.player-card { background: #1a1a3e; border-radius: 12px; padding: 14px; text-align: center; border: 2px solid #2a2a4e; cursor: pointer; transition: all 0.2s; }
+.player-card:hover { border-color: #e94560; }
+.player-card .p-name { font-size: 13px; font-weight: 600; color: #e0e0e0; }
+.player-card .p-tag { font-size: 11px; color: #888; margin-top: 4px; }
+.player-card .p-stars { font-size: 12px; margin-top: 4px; }
+.player-card.selected { border-color: #e94560; }
+
+/* Results */
+.result-panel { flex: 1; background: #1a1a3e; border-radius: 14px; padding: 20px; text-align: center; border: 1px solid #2a2a4e; }
+.result-panel .r-label { font-size: 12px; color: #888; margin-bottom: 6px; }
+.result-panel .r-emoji { font-size: 36px; margin: 8px 0; }
+.result-panel .r-ev { font-size: 30px; font-weight: 800; }
+.result-panel .r-winrate { font-size: 13px; color: #aaa; margin-top: 4px; }
+.ev-positive { color: #16c79a; }
+.ev-negative { color: #e94560; }
+
+.diff-bar { background: linear-gradient(135deg, rgba(22,199,154,0.12), rgba(22,199,154,0.03)); border: 1px solid #16c79a; border-radius: 14px; padding: 20px; text-align: center; margin: 16px 0; }
+.diff-bar .d-value { font-size: 34px; font-weight: 800; color: #16c79a; }
+.diff-bar .d-text { font-size: 13px; color: #aaa; margin-top: 6px; line-height: 1.5; }
+
+.chart-row { display: flex; gap: 16px; margin: 16px 0; }
+.chart-box { flex: 1; background: #1a1a3e; border-radius: 12px; padding: 14px; }
+.chart-box .c-label { font-size: 11px; color: #888; margin-bottom: 10px; }
+.chart-bars { display: flex; gap: 4px; height: 70px; align-items: flex-end; }
+.bar-green { background: #16c79a; border-radius: 4px 4px 0 0; }
+.bar-red { background: #e94560; border-radius: 4px 4px 0 0; }
+
+/* Search bar */
+.search-bar { display: flex; align-items: center; background: #1a1a3e; border-radius: 10px; padding: 10px 14px; border: 1px solid #2a2a4e; margin: 10px 0; }
+.search-bar span { color: #555; font-size: 14px; margin-right: 8px; }
+.search-bar input { background: transparent; border: none; color: #e0e0e0; font-size: 14px; width: 100%; outline: none; }
+.search-bar input::placeholder { color: #555; }
+
+/* Progress */
+.progress { height: 6px; background: #2a2a4e; border-radius: 3px; margin: 16px 0; overflow: hidden; }
+.progress-fill { height: 100%; background: linear-gradient(90deg, #0f3460, #e94560); border-radius: 3px; width: 72%; }
+
+/* Create player slider */
+.slider-row { display: flex; align-items: center; gap: 12px; margin: 8px 0; }
+.slider-label { width: 80px; font-size: 12px; color: #aaa; flex-shrink: 0; }
+.slider-track { flex: 1; height: 6px; background: #2a2a4e; border-radius: 3px; position: relative; }
+.slider-fill { height: 100%; background: #e94560; border-radius: 3px; width: 60%; }
+.slider-dot { width: 18px; height: 18px; background: #e94560; border-radius: 50%; position: absolute; right: 40%; top: -6px; cursor: pointer; }
+.slider-value { width: 40px; text-align: right; font-size: 13px; color: #fff; font-weight: 600; }
+
+.section-title { font-size: 14px; color: #e0e0e0; font-weight: 600; margin: 20px 0 10px; display: flex; align-items: center; gap: 8px; }
+
+/* Back link style */
+.back-link { color: #888; text-decoration: none; font-size: 13px; }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>🃏 德扑复盘教练 <span>· UI 原型</span></h1>
+  <p class="subtitle">Poker Noir 暗夜牌桌风 · 点击查看各个页面</p>
+
+  <div class="screens">
+
+    <!-- Screen 1: Home -->
+    <div class="screen-wrapper">
+      <div class="phone">
+        <div class="phone-notch"></div>
+        <div style="text-align:center; padding:30px 0 10px;">
+          <div style="font-size:42px;">🃏</div>
+          <div style="font-size:20px; font-weight:700; color:#fff; margin:12px 0 6px;">德扑复盘教练</div>
+          <div style="font-size:13px; color:#888; line-height:1.6;">
+            分析你的每一手牌<br>
+            看看<span style="color:#e94560; font-weight:600;">"如果换一种打法"</span>会怎样
+          </div>
+          <button class="btn btn-primary" style="width:80%; margin-top:28px;">🚀 开始复盘</button>
+          <div style="margin-top:30px; padding-top:20px; border-top:1px solid #2a2a4e;">
+            <div style="font-size:11px; color:#666; margin-bottom:10px;">快速示例</div>
+            <div style="display:flex; gap:10px; justify-content:center;">
+              <div style="background:#1a1a3e; border-radius:12px; padding:14px 18px; border:1px solid #2a2a4e; cursor:pointer;">
+                <span style="font-size:14px; font-weight:600; color:#e94560;">AA翻前allin</span><br>
+                <span style="font-size:11px; color:#888;">试试跟注？</span>
+              </div>
+              <div style="background:#1a1a3e; border-radius:12px; padding:14px 18px; border:1px solid #2a2a4e; cursor:pointer;">
+                <span style="font-size:14px; font-weight:600; color:#e94560;">AK中顶对</span><br>
+                <span style="font-size:11px; color:#888;">试试过牌？</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="screen-label">📄 首页</div>
+    </div>
+
+    <!-- Screen 2: Hand Input -->
+    <div class="screen-wrapper">
+      <div class="phone">
+        <div class="phone-notch"></div>
+        <div class="header">
+          <span class="back-link">← 返回</span>
+          <span class="header-center">步骤 1/4 · 手牌信息</span>
+          <span></span>
+        </div>
+
+        <div class="label">你的手牌</div>
+        <div class="cards-row">
+          <div class="card card-selected card-red"><span>A</span><span class="card-suit">♥</span></div>
+          <div class="card card-selected card-red"><span>K</span><span class="card-suit">♥</span></div>
+          <div class="card card-empty">+</div>
+          <div class="card card-empty">+</div>
+        </div>
+
+        <div class="label" style="margin-top:20px;">公牌</div>
+        <div class="board">
+          <div class="board-card board-flop card-red"><span>K</span><span class="card-suit">♦</span></div>
+          <div class="board-card board-flop card-black"><span>7</span><span class="card-suit">♠</span></div>
+          <div class="board-card board-flop card-black"><span>2</span><span class="card-suit">♣</span></div>
+          <div class="board-card board-turn card-red"><span>9</span><span class="card-suit">♥</span></div>
+          <div class="board-card board-river card-black"><span>3</span><span class="card-suit">♠</span></div>
+        </div>
+
+        <div class="label">对手人数</div>
+        <div class="chip-group">
+          <span class="chip">2</span>
+          <span class="chip chip-active">3</span>
+          <span class="chip">4</span>
+          <span class="chip">5</span>
+          <span class="chip">6</span>
+        </div>
+
+        <div class="label">位置</div>
+        <div class="chip-group">
+          <span class="chip">BTN</span>
+          <span class="chip">SB</span>
+          <span class="chip chip-blue">BB</span>
+          <span class="chip">UTG</span>
+          <span class="chip">MP</span>
+          <span class="chip">CO</span>
+        </div>
+
+        <div style="margin-top:24px; text-align:right;">
+          <button class="btn btn-green btn-sm">下一步：填行动 →</button>
+        </div>
+      </div>
+      <div class="screen-label">📄 手牌输入页</div>
+    </div>
+
+    <!-- Screen 3: Action Input -->
+    <div class="screen-wrapper">
+      <div class="phone">
+        <div class="phone-notch"></div>
+        <div class="header">
+          <span class="back-link">← 返回</span>
+          <span class="header-center">步骤 2/4 · 行动记录</span>
+          <span></span>
+        </div>
+
+        <div class="action-grid">
+          <div><div class="label-sm" style="text-align:center;">翻牌前</div><div class="action-cell"><div class="a-label">底池</div><div class="a-value">15</div></div></div>
+          <div><div class="label-sm" style="text-align:center; color:#16c79a;">翻牌</div><div class="action-cell flop-active"><div class="a-label">底池</div><div class="a-value">45</div></div></div>
+          <div><div class="label-sm" style="text-align:center; color:#f0a500;">转牌</div><div class="action-cell"><div class="a-label">底池</div><div class="a-value">95</div></div></div>
+          <div><div class="label-sm" style="text-align:center; color:#e94560;">河牌</div><div class="action-cell"><div class="a-label">底池</div><div class="a-value">195</div></div></div>
+          <div><div class="action-cell gray"><div class="a-label">你</div><div class="a-value" style="color:#e94560;">跟注3</div></div></div>
+          <div><div class="action-cell flop-active"><div class="a-label" style="color:#16c79a;">你</div><div class="a-value">下注20</div></div></div>
+          <div><div class="action-cell"><div class="a-label">你</div><div class="a-value" style="color:#f0a500;">过牌</div></div></div>
+          <div><div class="action-cell"><div class="a-label">你</div><div class="a-value" style="color:#666;">弃牌</div></div></div>
+          <div><div class="action-cell gray"><div class="a-label">对手</div><div class="a-value">加注3</div></div></div>
+          <div><div class="action-cell"><div class="a-label">对手</div><div class="a-value">跟注20</div></div></div>
+          <div><div class="action-cell"><div class="a-label">对手</div><div class="a-value">下注40</div></div></div>
+          <div><div class="action-cell gray"><div class="a-label">对手</div><div class="a-value" style="color:#666;">—</div></div></div>
+        </div>
+
+        <div style="background:#1a1a3e; border-radius:10px; padding:12px; margin:16px 0; font-size:12px; color:#888;">
+          A♥K♥ · 翻牌中顶对带听花
+        </div>
+
+        <div style="display:flex; gap:12px; margin-top:20px;">
+          <button class="btn btn-outline btn-sm" style="flex:1;">← 上一步</button>
+          <button class="btn btn-green btn-sm" style="flex:1;">下一步 →</button>
+        </div>
+      </div>
+      <div class="screen-label">📄 行动记录页</div>
+    </div>
+
+    <!-- Screen 4: Player Selection -->
+    <div class="screen-wrapper">
+      <div class="phone">
+        <div class="phone-notch"></div>
+        <div class="header">
+          <span class="back-link">← 返回</span>
+          <span class="header-center">选择对手牌手</span>
+          <span></span>
+        </div>
+
+        <div class="search-bar">
+          <span>🔍</span>
+          <input type="text" placeholder="搜索牌手...">
+        </div>
+
+        <div class="section-title">🏆 职业选手</div>
+        <div class="player-grid">
+          <div class="player-card selected">
+            <div class="p-name">Tom Dwan</div>
+            <div class="p-stars">🔥 激进 ⭐⭐⭐</div>
+            <div class="p-tag">VPIP 32% · 3-bet 12%</div>
+          </div>
+          <div class="player-card">
+            <div class="p-name">谭轩</div>
+            <div class="p-stars">🎯 稳健 ⭐⭐</div>
+            <div class="p-tag">VPIP 22% · 3-bet 6%</div>
+          </div>
+          <div class="player-card">
+            <div class="p-name">Phil Ivey</div>
+            <div class="p-stars">👑 全面 ⭐⭐⭐</div>
+            <div class="p-tag">VPIP 28% · 3-bet 9%</div>
+          </div>
+        </div>
+        <div style="text-align:right; margin-top:6px;"><span style="color:#e94560; font-size:12px; cursor:pointer;">更多 →</span></div>
+
+        <div class="section-title">👥 我的牌友</div>
+        <div class="player-grid">
+          <div class="player-card">
+            <div class="p-name">老张</div>
+            <div class="p-tag">紧凶型 · 24手</div>
+            <div style="width:100%; height:3px; background:#2a2a4e; border-radius:2px; margin-top:8px;"><div style="width:24%; height:100%; background:#16c79a; border-radius:2px;"></div></div>
+          </div>
+          <div class="player-card">
+            <div class="p-name">老李</div>
+            <div class="p-tag">松凶型 · 8手</div>
+            <div style="width:100%; height:3px; background:#2a2a4e; border-radius:2px; margin-top:8px;"><div style="width:8%; height:100%; background:#f0a500; border-radius:2px;"></div></div>
+          </div>
+          <div class="player-card" style="border-style:dashed; display:flex; align-items:center; justify-content:center; padding:20px; border-color:#3a3a5e;">
+            <span style="font-size:24px; color:#555;">+</span>
+          </div>
+        </div>
+
+        <div style="margin-top:20px; text-align:center;">
+          <button class="btn btn-primary btn-sm" style="width:80%;">下一步：选决策点 →</button>
+        </div>
+      </div>
+      <div class="screen-label">📄 牌手选择页 ⭐ 独家</div>
+    </div>
+
+    <!-- Screen 5: Decision Point -->
+    <div class="screen-wrapper">
+      <div class="phone">
+        <div class="phone-notch"></div>
+        <div class="header">
+          <span class="back-link">← 返回</span>
+          <span class="header-center">步骤 3/4 · 选择对比</span>
+          <span style="font-size:12px; color:#e94560;">VS Tom Dwan</span>
+        </div>
+
+        <div class="timeline">
+          <div class="tl-node"><div class="tl-label">翻牌前</div><div class="tl-action passive">跟注3</div></div>
+          <div class="tl-node"><div class="tl-label" style="color:#e94560;">🖱 点我</div><div class="tl-action active">下注20</div></div>
+          <div class="tl-node"><div class="tl-label">转牌</div><div class="tl-action passive">过牌</div></div>
+          <div class="tl-node"><div class="tl-label">河牌</div><div class="tl-action passive">弃牌</div></div>
+        </div>
+
+        <div class="modal-overlay">
+          <div class="modal">
+            <h3>🎯 试试替代方案</h3>
+            <div class="desc">翻牌 K♦7♠2♣ · 你实际选择了下注20</div>
+            <div class="option-group">
+              <div class="option selected">
+                <div class="opt-icon">✋</div>
+                <div class="opt-name">过牌</div>
+                <div class="opt-desc">让牌看免费牌</div>
+              </div>
+              <div class="option">
+                <div class="opt-icon">📈</div>
+                <div class="opt-name">加注</div>
+                <div class="opt-desc">最大化价值</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="label">对手牌手</div>
+        <div class="chip-group">
+          <span class="chip chip-active">Tom Dwan</span>
+          <span class="chip" style="color:#e94560;">🔄 换一位</span>
+        </div>
+
+        <div class="label">模拟次数</div>
+        <div class="chip-group">
+          <span class="chip chip-blue">10,000</span>
+        </div>
+
+        <div style="text-align:center; margin-top:20px;">
+          <button class="btn btn-primary" style="padding:14px 60px;">🚀 开始模拟</button>
+        </div>
+      </div>
+      <div class="screen-label">📄 决策点选择页 ⭐</div>
+    </div>
+
+    <!-- Screen 6: Create Player -->
+    <div class="screen-wrapper">
+      <div class="phone">
+        <div class="phone-notch"></div>
+        <div class="header">
+          <span class="back-link">← 返回</span>
+          <span class="header-center">创建牌友档案</span>
+          <span></span>
+        </div>
+
+        <div class="label">方法一：从牌局生成 <span style="color:#16c79a;">推荐</span></div>
+        <div style="background:#1a1a3e; border-radius:10px; padding:14px; border:1px solid #2a2a4e; cursor:pointer;">
+          <div style="display:flex; align-items:center; gap:10px;">
+            <span>🎴</span>
+            <span style="font-size:13px; color:#aaa;">从历史牌谱选择牌局...</span>
+            <span style="flex:1;"></span>
+            <span style="color:#555;">→</span>
+          </div>
+        </div>
+        <div style="font-size:11px; color:#555; margin-top:6px;">已选 3 手牌局 · 可提取基础风格参数</div>
+
+        <div style="margin:16px 0; position:relative; text-align:center;">
+          <div style="border-top:1px solid #2a2a4e; width:100%;"></div>
+          <span style="position:relative; top:-10px; background:#16213e; padding:0 12px; font-size:11px; color:#555;">或者</span>
+        </div>
+
+        <div class="label">方法二：自然语言描述</div>
+        <div style="background:#1a1a3e; border-radius:10px; padding:14px; min-height:80px; border:1px solid #2a2a4e; font-size:13px; color:#888;">
+          我这个朋友玩得很紧，但不是nuts不会reraise，翻牌中顶对会c-bet，但turn没中就会check...
+        </div>
+        <div style="text-align:right; margin-top:6px;">
+          <span style="font-size:12px; color:#e94560; cursor:pointer;">🤖 AI 生成风格参数</span>
+        </div>
+
+        <div class="label">风格参数（生成结果）</div>
+        <div style="background:#1a1a3e; border-radius:12px; padding:16px; border:1px solid #2a2a4e;">
+          <div class="slider-row">
+            <span class="slider-label">VPIP</span>
+            <div class="slider-track"><div class="slider-fill" style="width:24%;"></div><div class="slider-dot" style="left:24%;"></div></div>
+            <span class="slider-value">24%</span>
+          </div>
+          <div class="slider-row">
+            <span class="slider-label">PFR</span>
+            <div class="slider-track"><div class="slider-fill" style="width:16%;"></div><div class="slider-dot" style="left:16%;"></div></div>
+            <span class="slider-value">16%</span>
+          </div>
+          <div class="slider-row">
+            <span class="slider-label">3-bet</span>
+            <div class="slider-track"><div class="slider-fill" style="width:6%;"></div><div class="slider-dot" style="left:6%;"></div></div>
+            <span class="slider-value">6%</span>
+          </div>
+          <div class="slider-row">
+            <span class="slider-label">激进度</span>
+            <div class="slider-track" style="background:linear-gradient(90deg,#0f3460,#2a2a4e,#e94560);"><div class="slider-dot" style="left:35%; background:#f0a500;"></div></div>
+            <span class="slider-value" style="font-size:11px;">紧凶</span>
+          </div>
+        </div>
+
+        <div style="display:flex; gap:10px; margin-top:20px;">
+          <button class="btn btn-outline btn-sm" style="flex:1;">手动调整</button>
+          <button class="btn btn-outline btn-sm" style="flex:1;">重新生成</button>
+          <button class="btn btn-green btn-sm" style="flex:1;">✅ 保存</button>
+        </div>
+
+        <div style="margin-top:16px; background:rgba(22,199,154,0.06); border-radius:10px; padding:12px; border:1px solid rgba(22,199,154,0.2);">
+          <span style="font-size:12px; color:#16c79a;">🧬 保存后每次复盘可添加新牌局，自动更新参数，越用越像</span>
+        </div>
+      </div>
+      <div class="screen-label">📄 创建牌友页 ⭐ 独家</div>
+    </div>
+
+    <!-- Screen 7: Results -->
+    <div class="screen-wrapper">
+      <div class="phone">
+        <div class="phone-notch"></div>
+        <div class="header">
+          <span class="back-link">← 返回</span>
+          <span style="font-size:13px; font-weight:600; color:#16c79a;">复盘结果</span>
+          <span></span>
+        </div>
+
+        <div style="display:flex; gap:12px;">
+          <div class="result-panel">
+            <div class="r-label">你实际 · 翻牌下注20</div>
+            <div class="r-emoji">😐</div>
+            <div class="r-ev ev-positive">+3.2 BB</div>
+            <div class="r-winrate">胜率 72% · vs Tom Dwan</div>
+          </div>
+          <div class="result-panel" style="border-color:#16c79a;">
+            <div class="r-label" style="color:#16c79a;">如果 · 翻牌过牌</div>
+            <div class="r-emoji">🤑</div>
+            <div class="r-ev ev-positive" style="color:#16c79a;">+5.5 BB</div>
+            <div class="r-winrate">胜率 65% · vs Tom Dwan</div>
+          </div>
+        </div>
+
+        <div class="diff-bar">
+          <div class="d-value">+2.3 BB 🟢</div>
+          <div class="d-text">过牌比下注多赚 2.3BB<br>建议：这个牌面比较干，过牌可以引诱 Tom Dwan 诈唬</div>
+        </div>
+
+        <div class="label">📊 胜负分布对比</div>
+        <div class="chart-row">
+          <div class="chart-box">
+            <div class="c-label">实际（下注20）</div>
+            <div class="chart-bars">
+              <div style="flex:7; display:flex; flex-direction:column; justify-content:flex-end; gap:4px;">
+                <div class="bar-green" style="height:50px;"></div>
+                <div style="font-size:10px; color:#16c79a; text-align:center;">72%</div>
+              </div>
+              <div style="flex:3; display:flex; flex-direction:column; justify-content:flex-end; gap:4px;">
+                <div class="bar-red" style="height:20px;"></div>
+                <div style="font-size:10px; color:#e94560; text-align:center;">28%</div>
+              </div>
+            </div>
+          </div>
+          <div class="chart-box">
+            <div class="c-label" style="color:#16c79a;">替代（过牌）</div>
+            <div class="chart-bars">
+              <div style="flex:6.5; display:flex; flex-direction:column; justify-content:flex-end; gap:4px;">
+                <div class="bar-green" style="height:45px;"></div>
+                <div style="font-size:10px; color:#16c79a; text-align:center;">65%</div>
+              </div>
+              <div style="flex:3.5; display:flex; flex-direction:column; justify-content:flex-end; gap:4px;">
+                <div class="bar-red" style="height:24px;"></div>
+                <div style="font-size:10px; color:#e94560; text-align:center;">35%</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex; gap:10px; margin-top:16px;">
+          <button class="btn btn-outline btn-sm" style="flex:1;">✏️ 改输入</button>
+          <button class="btn btn-sm" style="flex:1; background:#0f3460; color:#fff;">🔄 换一个试试</button>
+          <button class="btn btn-sm" style="flex:1; background:#16c79a; color:#fff;">🆕 新牌局</button>
+        </div>
+      </div>
+      <div class="screen-label">📄 结果对比页 ⭐ MVP核心</div>
+    </div>
+
+  </div>
+</div>
+</body>
+</html>

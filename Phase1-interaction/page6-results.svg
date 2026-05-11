@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="420" height="650" viewBox="0 0 420 650">
+  <rect width="420" height="650" rx="20" fill="#16213e"/>
+  <text x="30" y="40" font-size="16" fill="#888">← 返回</text>
+  <text x="280" y="40" font-size="13" fill="#16c79a" font-weight="bold">复盘结果</text>
+
+  <!-- Two panels -->
+  <rect x="20" y="70" width="180" height="140" rx="12" fill="#1a1a3e" stroke="#2a2a4e" stroke-width="1"/>
+  <text x="110" y="95" text-anchor="middle" font-size="11" fill="#888">你实际 · 翻牌下注20</text>
+  <text x="110" y="125" text-anchor="middle" font-size="32">😐</text>
+  <text x="110" y="158" text-anchor="middle" font-size="24" fill="#16c79a" font-weight="bold">+3.2 BB</text>
+  <text x="110" y="180" text-anchor="middle" font-size="12" fill="#aaa">胜率 72%</text>
+
+  <rect x="215" y="70" width="180" height="140" rx="12" fill="#1a1a3e" stroke="#16c79a" stroke-width="2"/>
+  <text x="305" y="95" text-anchor="middle" font-size="11" fill="#16c79a">如果过牌</text>
+  <text x="305" y="125" text-anchor="middle" font-size="32">🤑</text>
+  <text x="305" y="158" text-anchor="middle" font-size="24" fill="#16c79a" font-weight="bold">+5.5 BB</text>
+  <text x="305" y="180" text-anchor="middle" font-size="12" fill="#aaa">胜率 65%</text>
+
+  <!-- Diff banner -->
+  <rect x="20" y="230" width="380" height="80" rx="12" fill="#1a2e1a" stroke="#16c79a" stroke-width="1"/>
+  <text x="210" y="262" text-anchor="middle" font-size="28" fill="#16c79a" font-weight="bold">+2.3 BB 🟢</text>
+  <text x="210" y="290" text-anchor="middle" font-size="11" fill="#aaa">过牌比下注多赚 2.3BB</text>
+
+  <!-- Chart -->
+  <text x="30" y="350" font-size="14" fill="#aaa">📊 胜负分布对比</text>
+  
+  <rect x="30" y="365" width="160" height="100" rx="10" fill="#1a1a3e"/>
+  <text x="110" y="385" text-anchor="middle" font-size="10" fill="#888">实际（下注20）</text>
+  <rect x="45" y="405" width="50" height="40" rx="4" fill="#16c79a"/>
+  <rect x="115" y="435" width="50" height="10" rx="4" fill="#e94560"/>
+  <text x="70" y="458" text-anchor="middle" font-size="9" fill="#16c79a">72%</text>
+  <text x="140" y="458" text-anchor="middle" font-size="9" fill="#e94560">28%</text>
+
+  <rect x="220" y="365" width="160" height="100" rx="10" fill="#1a1a3e" stroke="transparent"/>
+  <text x="300" y="385" text-anchor="middle" font-size="10" fill="#16c79a">替代（过牌）</text>
+  <rect x="235" y="415" width="50" height="30" rx="4" fill="#16c79a"/>
+  <rect x="305" y="435" width="50" height="10" rx="4" fill="#e94560"/>
+  <text x="260" y="458" text-anchor="middle" font-size="9" fill="#16c79a">65%</text>
+  <text x="330" y="458" text-anchor="middle" font-size="9" fill="#e94560">35%</text>
+
+  <!-- Action buttons -->
+  <rect x="25" y="540" width="110" height="44" rx="10" fill="none" stroke="#3a3a5e" stroke-width="2"/>
+  <text x="80" y="568" text-anchor="middle" font-size="13" fill="#888">✏️ 改输入</text>
+  <rect x="150" y="540" width="120" height="44" rx="10" fill="#0f3460"/>
+  <text x="210" y="568" text-anchor="middle" font-size="13" fill="#fff" font-weight="bold">🔁 换一个试试</text>
+  <rect x="285" y="540" width="110" height="44" rx="10" fill="#16c79a"/>
+  <text x="340" y="568" text-anchor="middle" font-size="13" fill="#fff" font-weight="bold">🆕 新牌局</text>
+
+  <text x="210" y="640" text-anchor="middle" font-size="11" fill="#555">Page 6/6 · 结果对比 ⭐ MVP核心</text>
+</svg>
